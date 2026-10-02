@@ -1,0 +1,35 @@
+name: Test JSON format output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          format: json
+          output: results.json
+
+      - name: Assert JSON output file exists
+        run: |
+          echo "Checking for results.json..."
+          if [ ! -f "$GITHUB_WORKSPACE/results.json" ]; then
+            echo "FAIL: results.json not found"
+            exit 1
+          fi
+          echo "PASS: results.json exists"
+
+      - name: Assert JSON output is valid JSON
+        run: |
+          echo "Validating JSON content..."
+          CONTENT=$(cat "$GITHUB_WORKSPACE/results.json")
+          echo "Content preview: $(echo "$CONTENT" | head -c 200)"
+          if ! echo "$CONTENT" | python3 -c "import sys, json; json.load(sys.stdin)" 2>/dev/null; then
+            echo "FAIL: results.json is not valid JSON"
+            exit 1
+          fi
+          echo "PASS: results.json is valid JSON"

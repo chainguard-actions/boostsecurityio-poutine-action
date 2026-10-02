@@ -1,0 +1,36 @@
+name: Test basic SARIF output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          format: sarif
+          output: results.sarif
+
+      - name: Assert SARIF output file exists
+        run: |
+          echo "Checking for results.sarif..."
+          if [ ! -f "$GITHUB_WORKSPACE/results.sarif" ]; then
+            echo "FAIL: results.sarif not found"
+            exit 1
+          fi
+          echo "PASS: results.sarif exists"
+
+      - name: Assert SARIF output is valid JSON with SARIF structure
+        run: |
+          echo "Validating SARIF content..."
+          CONTENT=$(cat "$GITHUB_WORKSPACE/results.sarif")
+          echo "Content preview: $(echo "$CONTENT" | head -c 200)"
+          # SARIF files are JSON with a $schema or version field
+          if ! echo "$CONTENT" | python3 -c "import sys, json; data=json.load(sys.stdin); assert 'runs' in data or 'version' in data or '\$schema' in data" 2>/dev/null; then
+            echo "FAIL: results.sarif does not appear to be valid SARIF JSON"
+            exit 1
+          fi
+          echo "PASS: results.sarif is valid SARIF"
