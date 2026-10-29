@@ -7,9 +7,9 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1.1.4 | [`v1.1.4`](https://github.com/chainguard-actions/boostsecurityio-poutine-action/tree/v1.1.4) | [`e240ebd`](https://github.com/boostsecurityio/poutine-action/commit/e240ebd3eff8b2db5a8e5f6b28f58739d7db2247) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v1.1.4 | [`v1.1.4`](https://github.com/chainguard-actions/boostsecurityio-poutine-action/tree/v1.1.4) | [`e240ebd`](https://github.com/boostsecurityio/poutine-action/commit/e240ebd3eff8b2db5a8e5f6b28f58739d7db2247) | [`HARDENING.md`](https://github.com/chainguard-actions/boostsecurityio-poutine-action/blob/v1.1.4/HARDENING.md) |
 
 ## Privacy
 
